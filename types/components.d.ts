@@ -1,5 +1,12 @@
 import { ReactNode } from "react";
-import { type TextProps as RNTextProps } from "react-native";
+import {
+  type TextProps as RNTextProps,
+  TextInputProps as RNTextInputProps,
+  PressableProps,
+  StyleProp,
+  ViewStyle,
+} from "react-native";
+import { Controller, Control, FieldValues } from "react-hook-form";
 
 // TEXT
 type VariantTypes =
@@ -18,4 +25,19 @@ export interface TextProps extends RNTextProps {
   align?: AlignTypes;
   color?: ColorTypes;
   children: ReactNode;
+}
+
+// BUTTON
+export interface ButtonProps extends PressableProps {
+  title?: string;
+  onPress: () => void;
+  disabled?: boolean;
+  style?: StyleProp<ViewStyle>;
+  children?: ReactNode;
+}
+
+// TEXTINPUT
+export interface TextInputProps extends RNTextInputProps {
+  control: Control<FieldValues>;
+  name: string;
 }
