@@ -1,16 +1,8 @@
-import {
-  TextInput as RNTextInput,
-  TextInputProps as RNTextInputProps,
-  StyleSheet,
-} from "react-native";
-import { Controller, Control, FieldValues } from "react-hook-form";
+import { TextInput as RNTextInput, StyleSheet } from "react-native";
+import { Controller } from "react-hook-form";
 import { palette } from "@/styles/theme";
 import { useThemeColor } from "@/hooks";
-
-interface TextInputProps extends RNTextInputProps {
-  control: Control<FieldValues>;
-  name: string;
-}
+import { TextInputProps } from "@/types";
 
 const TextInput = ({
   control,
