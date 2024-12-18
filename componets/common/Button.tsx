@@ -41,7 +41,6 @@ const Button = ({
       disabled={disabled}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-      style={styles.flex}
     >
       <Animated.View
         style={[
@@ -65,7 +64,6 @@ const Button = ({
 export default Button;
 
 const styles = StyleSheet.create({
-  flex: { flex: 1 },
   container: {
     alignItems: "center",
     justifyContent: "center",
