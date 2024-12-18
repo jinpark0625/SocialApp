@@ -5,11 +5,11 @@ type DefaultValueType = {
 };
 
 const useFormControl = ({ defaultValues }: DefaultValueType) => {
-  const { control, handleSubmit, formState } = useForm<FieldValues>({
+  const { control, handleSubmit, formState, setFocus } = useForm<FieldValues>({
     defaultValues: defaultValues,
   });
 
-  return { control, handleSubmit, formState };
+  return { control, handleSubmit, formState, setFocus };
 };
 
 export default useFormControl;
