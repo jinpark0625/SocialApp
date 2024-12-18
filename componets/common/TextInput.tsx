@@ -1,4 +1,9 @@
-import { TextInput as RNTextInput, StyleSheet } from "react-native";
+import {
+  Pressable,
+  TextInput as RNTextInput,
+  StyleSheet,
+  View,
+} from "react-native";
 import { Controller } from "react-hook-form";
 import { palette } from "@/styles/theme";
 import { useThemeColor } from "@/hooks";
@@ -6,9 +11,12 @@ import { TextInputProps } from "@/types";
 
 const TextInput = ({
   control,
+  rules,
   placeholder = "",
   name,
   style,
+  icon,
+  onPressIcon,
   ...props
 }: TextInputProps) => {
   const colorScheme = useThemeColor();
@@ -20,24 +28,30 @@ const TextInput = ({
   };
 
   return (
-    <Controller
-      control={control}
-      rules={{
-        required: true,
-      }}
-      render={({ field: { onChange, onBlur, value } }) => (
-        <RNTextInput
-          placeholder={placeholder}
-          onBlur={onBlur}
-          onChangeText={onChange}
-          value={value}
-          style={[textInputStyles, styles.container, style]}
-          placeholderTextColor={palette.gray[300]}
-          {...props}
-        />
+    <View>
+      <Controller
+        control={control}
+        rules={rules}
+        name={name}
+        render={({ field: { onChange, onBlur, value, ref } }) => (
+          <RNTextInput
+            ref={ref}
+            placeholder={placeholder}
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            style={[textInputStyles, styles.container, style]}
+            placeholderTextColor={palette.gray[300]}
+            {...props}
+          />
+        )}
+      />
+      {icon && (
+        <Pressable onPress={onPressIcon} style={styles.icon} hitSlop={8}>
+          {icon}
+        </Pressable>
       )}
-      name={name}
-    />
+    </View>
   );
 };
 
@@ -51,5 +65,12 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     fontFamily: "Pretendard-Regular",
     fontSize: 16,
+  },
+  icon: {
+    position: "absolute",
+    right: 16,
+    height: 54,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
