@@ -5,8 +5,18 @@ import {
   PressableProps,
   StyleProp,
   ViewStyle,
+  TextStyle,
 } from "react-native";
-import { Controller, Control, FieldValues } from "react-hook-form";
+import {
+  Controller,
+  Control,
+  FieldValues,
+  RegisterOptions,
+} from "react-hook-form";
+
+/**
+ * COMMON
+ */
 
 // TEXT
 type VariantTypes =
@@ -40,4 +50,40 @@ export interface ButtonProps extends PressableProps {
 export interface TextInputProps extends RNTextInputProps {
   control: Control<FieldValues>;
   name: string;
+  rules?: Omit<
+    RegisterOptions,
+    "valueAsNumber" | "valueAsDate" | "setValueAs" | "disabled"
+  >;
+  icon?: ReactNode;
+  onPressIcon?: () => void;
+}
+
+// MODAL
+export type ModalType = "confirm" | "custom";
+interface BaseModalProps {
+  type: ModalType;
+}
+
+interface ConfirmModalProps extends BaseModalProps {
+  type: "confirm";
+  title?: string;
+  message: string;
+  onConfirm?: () => void;
+  onCancel?: () => void;
+}
+
+interface CustomModalProps extends BaseModalProps {
+  type: "custom";
+  component: React.ReactNode;
+}
+
+export type ModalProps = ConfirmModalProps | CustomModalProps;
+
+/**
+ * LAYOUT
+ */
+// HERO
+export interface HeroProps {
+  content: string;
+  style?: StyleProp<TextStyle>;
 }
