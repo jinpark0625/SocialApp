@@ -1,8 +1,9 @@
 import {
   View,
-  TouchableWithoutFeedback,
   Keyboard,
   StyleSheet,
+  Platform,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { Container, Hero } from "@/componets/layout";
 import { AuthForm } from "@/componets/sections";
@@ -10,7 +11,10 @@ import { AuthForm } from "@/componets/sections";
 const LoginScreen = () => {
   return (
     <Container>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <TouchableWithoutFeedback
+        onPress={Keyboard.dismiss}
+        style={styles.container}
+      >
         <View style={styles.container}>
           <Hero
             content={`환영합니다!${`\n`}로그인 후 시작하세요`}
@@ -30,6 +34,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   hero: {
-    paddingTop: 60,
+    paddingTop: Platform.OS === "ios" ? 60 : 76,
   },
 });
