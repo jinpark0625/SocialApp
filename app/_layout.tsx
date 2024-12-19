@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { Stack } from "expo-router";
+import { AppLoader, Providers } from "@/componets/app";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 
@@ -13,15 +12,9 @@ export default function RootLayout() {
     "Pretendard-SemiBold": require("../assets/fonts/Pretendard-SemiBold.ttf"),
   });
 
-  useEffect(() => {
-    if (loaded || error) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded, error]);
-
-  if (!loaded && !error) {
-    return null;
-  }
-
-  return <Stack />;
+  return (
+    <Providers>
+      <AppLoader fontsLoaded={loaded} fontError={error} />
+    </Providers>
+  );
 }
