@@ -88,6 +88,13 @@ export interface HeroProps {
   style?: StyleProp<TextStyle>;
 }
 
+export interface HeaderProps {
+  left?: ReactNode;
+  right?: ReactNode;
+  title?: string;
+  style?: StyleProp<ViewStyle>;
+}
+
 /**
  * SECTIONS
  */
