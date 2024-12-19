@@ -29,7 +29,7 @@ const Modal = () => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <RNModal visible={isOpen} transparent onRequestClose={closeModal}>
         <TouchableWithoutFeedback onPress={closeModal}>
           <View style={styles.modalBackground}>
@@ -46,6 +46,11 @@ const Modal = () => {
 export default Modal;
 
 const styles = StyleSheet.create({
+  container: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+  },
   modalBackground: {
     flex: 1,
     justifyContent: "center",
