@@ -87,3 +87,13 @@ export interface HeroProps {
   content: string;
   style?: StyleProp<TextStyle>;
 }
+
+/**
+ * SECTIONS
+ */
+
+// AUTHFORM
+export interface AuthFormProps {
+  isRegister?: boolean;
+  onSubmit: () => Promise<void>;
+}
