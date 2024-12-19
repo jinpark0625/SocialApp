@@ -22,9 +22,9 @@ const Button = ({
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: withSpring(isPressed.value ? 0.96 : 1, config) }],
-    backgroundColor: withTiming(
-      isPressed.value ? palette.primaryDark : palette.primary
-    ),
+    backgroundColor: disabled
+      ? palette.primaryLight
+      : withTiming(isPressed.value ? palette.primaryDark : palette.primary),
   }));
 
   const handlePressIn = () => {
@@ -42,13 +42,7 @@ const Button = ({
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
     >
-      <Animated.View
-        style={[
-          styles.container,
-          disabled ? styles.primaryLight : animatedStyle,
-          style,
-        ]}
-      >
+      <Animated.View style={[styles.container, animatedStyle, style]}>
         {title ? (
           <Text color="white" weight="medium">
             {title}
@@ -69,8 +63,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: 54,
     borderRadius: 16,
-  },
-  primaryLight: {
-    backgroundColor: palette.primaryLight,
   },
 });
