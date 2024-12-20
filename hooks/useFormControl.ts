@@ -1,12 +1,14 @@
-import { useForm, FieldValues } from "react-hook-form";
+import { useForm, UseFormReturn, DefaultValues } from "react-hook-form";
 
-type DefaultValueType = {
-  defaultValues: Record<string, string>;
+type UseFormControlProps<T> = {
+  defaultValues: DefaultValues<T>;
 };
 
-const useFormControl = ({ defaultValues }: DefaultValueType) => {
-  const formController = useForm<FieldValues>({
-    defaultValues: defaultValues,
+const useFormControl = <T extends Record<string, any>>({
+  defaultValues,
+}: UseFormControlProps<T>): UseFormReturn<T> => {
+  const formController = useForm<T>({
+    defaultValues,
   });
 
   return formController;
