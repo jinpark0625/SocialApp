@@ -3,7 +3,6 @@ import { Header } from "@/componets/layout";
 import { useTheme } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { Text } from "@/componets/common";
 import { useAuth, useModal } from "@/hooks";
 
 const UserLayout = () => {
@@ -51,20 +50,6 @@ const UserLayout = () => {
       <Stack.Screen
         name="edit"
         options={{
-          header: () => (
-            <Header
-              right={
-                <TouchableOpacity
-                  hitSlop={8}
-                  style={{ alignItems: "flex-end" }}
-                >
-                  <Text variant="subheading" weight="semiBold">
-                    수정
-                  </Text>
-                </TouchableOpacity>
-              }
-            />
-          ),
           gestureEnabled: false,
         }}
       />
