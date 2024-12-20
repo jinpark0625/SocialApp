@@ -22,6 +22,7 @@ const lightTheme = {
     ...DefaultTheme.colors,
     primary: palette.primary,
     background: palette.white,
+    card: palette.gray[300],
     text: palette.gray[500],
     border: palette.gray[200],
   },
@@ -32,8 +33,9 @@ const darkTheme = {
   ...DarkTheme,
   colors: {
     ...DarkTheme.colors,
-    primary: palette.primary,
+    primary: palette.white,
     background: palette.gray[600],
+    card: palette.gray[400],
     text: palette.gray[100],
     border: palette.gray[400],
   },
@@ -56,6 +58,7 @@ export const colorScheme = {
     icon: palette.gray[300],
     input: palette.gray[100],
     border: palette.gray[200],
+    modal: palette.white,
   },
   dark: {
     text: {
@@ -71,5 +74,6 @@ export const colorScheme = {
     icon: palette.gray[300],
     input: palette.gray[500],
     border: palette.gray[400],
+    modal: palette.gray[500],
   },
 };
