@@ -5,7 +5,8 @@ import { CommentItemProps } from "@/types";
 const CommentItem = ({
   id,
   message,
-  userName,
+  // userName,
+  userId,
   postedAt,
   isMyComment,
   onRemove,
@@ -20,7 +21,8 @@ const CommentItem = ({
     <View style={styles.container}>
       <View style={styles.head}>
         <Text variant="body2" weight="semiBold">
-          {userName}
+          {/* TODO: userName으로 데이터변환.. */}
+          {userId} (userName으로 변경필요)
         </Text>
         <Text variant="caption" weight="medium" color="gray_300">
           {formattedDate}
