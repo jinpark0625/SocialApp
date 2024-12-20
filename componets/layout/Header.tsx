@@ -18,10 +18,7 @@ const Header = ({ left, right, title, style }: HeaderProps) => {
       style={[
         {
           paddingTop: top,
-          height:
-            Platform.OS === "android"
-              ? 56 + (StatusBar.currentHeight || 0)
-              : 44 + top,
+          height: Platform.OS === "android" ? 56 : 44 + top,
         },
         styles.container,
         style,
@@ -63,6 +60,6 @@ const styles = StyleSheet.create({
     width: 36,
   },
   leftButtonContainer: {
-    marginLeft: -5,
+    marginLeft: -3,
   },
 });
