@@ -5,14 +5,19 @@ import {
   Image,
   Pressable,
 } from "react-native";
+import { router } from "expo-router";
 
-const PostGridItem = ({ post }) => {
+const PostGridItem = ({ post, itemId }: { post: string; itemId: number }) => {
   const dimensions = useWindowDimensions();
   const size = (dimensions.width - 3) / 3;
 
+  const navigateToDetail = () => {
+    router.navigate(`/feed/${itemId}`);
+  };
+
   return (
     <Pressable
-      onPress={() => {}}
+      onPress={navigateToDetail}
       style={({ pressed }) => [
         {
           opacity: pressed ? 0.6 : 1,
