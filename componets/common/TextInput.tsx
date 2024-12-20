@@ -4,12 +4,12 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { Controller } from "react-hook-form";
+import { Controller, FieldValues } from "react-hook-form";
 import { palette } from "@/styles/theme";
 import { useThemeColor } from "@/hooks";
 import { TextInputProps } from "@/types";
 
-const TextInput = ({
+const TextInput = <T extends FieldValues>({
   control,
   rules,
   placeholder = "",
@@ -18,7 +18,7 @@ const TextInput = ({
   icon,
   onPressIcon,
   ...props
-}: TextInputProps) => {
+}: TextInputProps<T>) => {
   const colorScheme = useThemeColor();
 
   const textInputStyles = {
