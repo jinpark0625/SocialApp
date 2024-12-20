@@ -123,7 +123,7 @@ React Native, Expo, Recoil, React Hook Form, TypeScript
 ### 설치
 ```
 git clone https://github.com/jinpark0625/SocialApp
-cd SocialApp
+cd SocialApp
 npm install
 ```
 
