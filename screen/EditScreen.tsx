@@ -1,84 +1,69 @@
-import { Platform, InputAccessoryView, View, StyleSheet } from "react-native";
-import { Avatar, Button, TextInput } from "@/componets/common";
-import { useFormControl, useModal, useImagePicker } from "@/hooks";
-import { AUTH_ERROR_MESSAGES } from "@/constants";
+import { StyleSheet } from "react-native";
+import { EditForm } from "@/componets/sections";
+import { useModal, useImagePicker, useUser, useMockApi } from "@/hooks";
+import { mockApi } from "@/api/mockApi";
 
-const INPUT_ACCESSORY_ID = "nickname";
+const EditScreen = () => {
+  const INPUT_ACCESSORY_ID = "nickname";
 
-const EditScreen = ({ onSubmit }) => {
+  const { currentUser, editUserProfile } = useUser();
   const { selectedImage, pickImageAsync } = useImagePicker();
   const { showModal } = useModal();
+  const { apiCall } = useMockApi();
 
-  const defaultValues = {
-    nickname: "",
-  };
+  const updateUserProfile = async (
+    data: ProfileData,
+    selectedImage: string | undefined
+  ) => {
+    try {
+      const updatedData = {
+        nickname: data.nickname || currentUser?.nickname,
+        profileImg: selectedImage || currentUser?.profileImg,
+      };
 
-  const {
-    control,
-    handleSubmit,
-    formState: { isValid },
-  } = useFormControl({
-    defaultValues,
-  });
+      const res = await apiCall(
+        mockApi.updateProfile,
+        Number(currentUser?.id),
+        updatedData
+      );
 
-  const handleFormSubmit = handleSubmit(
-    async (data) => {
-      //  TODO: 실제 data 전달!
-      await onSubmit();
-    },
-    (errors) => {
-      if (errors.nickname) {
+      if (res) {
+        editUserProfile(res.nickname, res.profileImg);
         showModal({
           type: "confirm",
-          title: AUTH_ERROR_MESSAGES["nickname"].title,
-          message:
-            (errors["nickname"]?.message as string) ||
-            AUTH_ERROR_MESSAGES["nickname"].message,
+          title: "유저 프로필 수정",
+          message: "성공적으로 프로필이 변경되었습니다.",
+          onConfirm: () => console.log("확인"),
+        });
+        return;
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        showModal({
+          type: "confirm",
+          title: "유저 프로필 수정 실패",
+          message: err.message,
+          onConfirm: () => console.log("확인"),
+        });
+      } else {
+        showModal({
+          type: "confirm",
+          title: "유저 프로필 수정 실패",
+          message: "프로필을 수정할 수 없습니다. 잠시후 다시 시도 해주세요.",
           onConfirm: () => console.log("확인"),
         });
       }
     }
-  );
+  };
 
   return (
-    <>
-      <View style={styles.container}>
-        <Avatar
-          size={90}
-          isIcon
-          onPress={pickImageAsync}
-          source={selectedImage}
-        />
-        <View style={styles.inputWrap}>
-          <TextInput
-            control={control}
-            name="nickname"
-            placeholder="닉네임 입력 (최대 12자)"
-            returnKeyType="done"
-            maxLength={12}
-            rules={{
-              required: "닉네임을 입력해주세요",
-              maxLength: {
-                value: 12,
-                message: "닉네임은 12자 이내여야 합니다",
-              },
-            }}
-            inputAccessoryViewID={INPUT_ACCESSORY_ID}
-            onSubmitEditing={handleFormSubmit}
-          />
-        </View>
-      </View>
-      {Platform.OS === "ios" && (
-        <InputAccessoryView nativeID={INPUT_ACCESSORY_ID}>
-          <Button
-            disabled={!isValid}
-            title="수정하기"
-            onPress={handleFormSubmit}
-            style={{ borderRadius: 0 }}
-          />
-        </InputAccessoryView>
-      )}
-    </>
+    <EditForm
+      currentUser={currentUser}
+      selectedImage={selectedImage}
+      pickImageAsync={pickImageAsync}
+      inputAccessoryViewID={INPUT_ACCESSORY_ID}
+      onSubmit={updateUserProfile}
+    />
   );
 };
 
