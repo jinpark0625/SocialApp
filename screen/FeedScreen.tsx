@@ -1,186 +1,63 @@
-import { FlatList, StyleSheet, View } from "react-native";
-import { CommentItem, CommentInput, FeedItem } from "@/componets/sections";
+import { useState, useEffect } from "react";
+import { FeedDetail } from "@/componets/sections";
+import { useMockApi, useModal, useUser } from "@/hooks";
+import { mockApi } from "@/api/mockApi";
+import { UserWithoutPasswordAndEmail } from "@/types/api";
 
-const FeedScreen = ({ id }: { id: number }) => {
-  const data = {
-    id: 1,
-    userName: "test",
-    postedAt: "333",
-    body: "sss",
-    uri: "https://i.pinimg.com/736x/bf/24/3e/bf243e885e034736c1b954fd7e5002ac.jpg",
-    commentCount: 2,
+const FeedScreen = ({ feedId }: { feedId: number }) => {
+  const { showModal } = useModal();
+  const { apiCall } = useMockApi();
+  const { currentUser } = useUser();
+
+  const [data, setData] = useState<
+    (Feed & { user: UserWithoutPasswordAndEmail }) | null
+  >(null);
+
+  const fetchFeed = async () => {
+    try {
+      const res = await apiCall(mockApi.getFeedDetail, feedId);
+
+      setData(res);
+    } catch (err) {
+      if (err instanceof Error) {
+        showModal({
+          type: "confirm",
+          title: "불러오기 실패",
+          message: err.message,
+          onConfirm: () => console.log("확인"),
+        });
+      } else {
+        showModal({
+          type: "confirm",
+          title: "불러오기 실패",
+          message: "게시글을 불러올 수 없습니다. 잠시후 다시 시도 해주세요.",
+          onConfirm: () => console.log("확인"),
+        });
+      }
+    }
   };
 
-  const commentData = [
-    {
-      id: 1,
-      message: "호잇",
-      userId: 1,
-      userName: "test",
-      postedAt: "333",
-      isMyComment: false,
-    },
-    {
-      id: 1,
-      message: "호잇",
-      userId: 1,
-      userName: "test",
-      postedAt: "333",
-      isMyComment: false,
-    },
-    {
-      id: 1,
-      message: "호잇",
-      userId: 1,
-      userName: "test",
-      postedAt: "333",
-      isMyComment: false,
-    },
-    {
-      id: 1,
-      message: "호잇",
-      userId: 1,
-      userName: "test",
-      postedAt: "333",
-      isMyComment: false,
-    },
-    {
-      id: 1,
-      message: "호잇",
-      userId: 1,
-      userName: "test",
-      postedAt: "333",
-      isMyComment: false,
-    },
-    {
-      id: 1,
-      message: "호잇",
-      userId: 1,
-      userName: "test",
-      postedAt: "333",
-      isMyComment: false,
-    },
-    {
-      id: 1,
-      message: "호잇",
-      userId: 1,
-      userName: "test",
-      postedAt: "333",
-      isMyComment: false,
-    },
-    {
-      id: 1,
-      message: "호잇",
-      userId: 1,
-      userName: "test",
-      postedAt: "333",
-      isMyComment: false,
-    },
-    {
-      id: 1,
-      message: "호잇",
-      userId: 1,
-      userName: "test",
-      postedAt: "333",
-      isMyComment: false,
-    },
-    {
-      id: 1,
-      message: "호잇",
-      userId: 1,
-      userName: "test",
-      postedAt: "333",
-      isMyComment: false,
-    },
-    {
-      id: 1,
-      message: "호잇",
-      userId: 1,
-      userName: "test",
-      postedAt: "333",
-      isMyComment: false,
-    },
-    {
-      id: 1,
-      message: "호잇",
-      userId: 1,
-      userName: "test",
-      postedAt: "333",
-      isMyComment: false,
-    },
-    {
-      id: 1,
-      message: "호잇",
-      userId: 1,
-      userName: "test",
-      postedAt: "333",
-      isMyComment: false,
-    },
-    {
-      id: 1,
-      message: "호잇",
-      userId: 1,
-      userName: "test",
-      postedAt: "333",
-      isMyComment: false,
-    },
-  ];
-
-  const handleRemoveComment = (id) => {
+  const handleRemoveComment = (id: number) => {
     // TODO: remove
   };
 
-  const handleModifyComment = (id) => {
+  const handleModifyComment = (id: number) => {
     // TODO: remove
   };
+
+  useEffect(() => {
+    fetchFeed();
+  }, []);
 
   return (
-    <>
-      <FlatList
-        style={styles.flatList}
-        contentContainerStyle={[styles.flatListContent]}
-        data={commentData}
-        renderItem={({ item }) => (
-          <CommentItem
-            id={item.id}
-            message={item.message}
-            postedAt={item.postedAt}
-            userName={item.userName}
-            onRemove={handleRemoveComment}
-            onModify={handleModifyComment}
-            // isMyComment={item.userId === currentUser?.id}
-            isMyComment={item.isMyComment}
-          />
-        )}
-        ListHeaderComponent={
-          <>
-            <FeedItem
-              id={id}
-              userName={data.userName}
-              postedAt={data.postedAt}
-              body={data.body}
-              source={data.uri}
-              commentCount={data.commentCount}
-            />
-          </>
-        }
-        ListHeaderComponentStyle={{ paddingBottom: 12 }}
-      />
-      <CommentInput articleId={id} />
-    </>
+    <FeedDetail
+      data={data}
+      handleRemoveComment={handleRemoveComment}
+      handleModifyComment={handleModifyComment}
+      currentUser={currentUser}
+      feedId={feedId}
+    />
   );
 };
 
 export default FeedScreen;
-
-const styles = StyleSheet.create({
-  spinner: {
-    flex: 1,
-  },
-  flatList: {
-    flex: 1,
-  },
-  flatListContent: {
-    padding: 20,
-  },
-});
