@@ -31,7 +31,10 @@ const Providers = ({ children }: { children: ReactNode }) => {
       <SafeAreaProvider>
         <ThemeProvider value={theme}>
           <RecoilRoot>
-            <StatusBar />
+            <StatusBar
+              translucent={false}
+              backgroundColor={theme.colors.background}
+            />
             {children}
             <Modal />
           </RecoilRoot>
