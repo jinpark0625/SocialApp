@@ -25,6 +25,13 @@ const AppLayout = () => {
           gestureEnabled: false,
         }}
       />
+      <Stack.Screen
+        name="profile/[id]"
+        options={{
+          header: () => <Header />,
+          gestureEnabled: false,
+        }}
+      />
     </Stack>
   );
 };
