@@ -15,6 +15,8 @@ import {
   RegisterOptions,
 } from "react-hook-form";
 import { ImageStyle, ImageContentFit } from "expo-image";
+import { UserWithoutPasswordAndEmail } from "@/types/api";
+
 /**
  * COMMON
  */
@@ -48,11 +50,22 @@ export interface ButtonProps extends PressableProps {
 }
 
 // TEXTINPUT
-export interface TextInputProps extends RNTextInputProps {
-  control: Control<FieldValues>;
-  name: string;
+// export interface TextInputProps extends RNTextInputProps {
+//   control: Control<FieldValues>;
+//   name: string;
+//   rules?: Omit<
+//     RegisterOptions,
+//     "valueAsNumber" | "valueAsDate" | "setValueAs" | "disabled"
+//   >;
+//   icon?: ReactNode;
+//   onPressIcon?: () => void;
+// }
+export interface TextInputProps<T extends FieldValues>
+  extends RNTextInputProps {
+  control: Control<T>;
+  name: Path<T>;
   rules?: Omit<
-    RegisterOptions,
+    RegisterOptions<T>,
     "valueAsNumber" | "valueAsDate" | "setValueAs" | "disabled"
   >;
   icon?: ReactNode;
@@ -86,7 +99,7 @@ export interface AvatarProps {
   size?: number;
   style?: StyleProp<ImageStyle>;
   isIcon?: boolean;
-  onPress?: () => void;
+  onPress?: () => Promise<void>;
 }
 
 // IMAGE
@@ -119,17 +132,73 @@ export interface HeaderProps {
  */
 
 // AUTHFORM
+export type UserSubmit = {
+  email: string;
+  password: string;
+  nickname?: string;
+};
 export interface AuthFormProps {
   isRegister?: boolean;
-  onSubmit: () => Promise<void>;
+  isSubmitting: boolean;
+  onSubmit: (data: UserSubmit) => Promise<void>;
   inputAccessoryId: string;
 }
 
-export interface FeedItemProps {
+// FEED ITEM
+export interface FeedItemProps extends Feed {
+  nickname: string;
+  profileImg: string;
+}
+
+// COMMNET INPUT
+export interface CommentInputProps {
+  feedId: number;
+}
+
+// COMMNET ITEM
+export interface CommentItemProps {
   id: number;
-  userName: string;
+  message: string;
+  // userName: string;
+  userId: number;
   postedAt: string;
-  body?: string;
-  source?: string;
-  commentCount: number;
+  isMyComment: boolean;
+  onRemove(id: number): void;
+  onModify(id: number): void;
+}
+
+// COMMNET FORM
+export interface CommentFormProps {
+  visible: boolean;
+  onClose(): void;
+  onSubmit(message: string): void;
+  initialMessage?: string;
+}
+
+// USER INFO
+export interface UserInfoProps {
+  isCurrentUser?: boolean;
+  user: User | null;
+  data: (Feed & { user: UserWithoutPasswordAndEmail })[] | null;
+}
+
+// EDITFORM
+export interface EditFormProps {
+  currentUser: User | null;
+  selectedImage: string | undefined;
+  pickImageAsync: () => Promise<void>;
+  inputAccessoryViewID: string;
+  onSubmit: (
+    { nickname: string },
+    selectedImage: string | undefined
+  ) => Promise<void>;
+}
+
+// FEEDDETAIL
+export interface FeedDetailProps {
+  data: (Feed & { user: UserWithoutPasswordAndEmail }) | null;
+  handleRemoveComment: (id: number) => void;
+  handleModifyComment: (id: number) => void;
+  currentUser: User | null;
+  feedId: number;
 }
