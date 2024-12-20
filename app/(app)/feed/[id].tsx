@@ -3,7 +3,7 @@ import FeedScreen from "@/screen/FeedScreen";
 const Feed = () => {
   const { id } = useLocalSearchParams();
 
-  return <FeedScreen id={id} />;
+  return <FeedScreen feedId={Number(id)} />;
 };
 
 export default Feed;
