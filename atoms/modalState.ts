@@ -1,4 +1,3 @@
-// atoms/modalState.ts
 import { atom } from "recoil";
 import { ModalProps } from "@/types/components";
 
