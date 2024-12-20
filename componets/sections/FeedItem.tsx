@@ -1,73 +1,81 @@
 import { StyleSheet, TouchableOpacity, View, Pressable } from "react-native";
 import { Avatar, Text, Image } from "@/componets/common";
-import { FeedItemProps } from "@/types";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useThemeColor } from "@/hooks";
 import { router } from "expo-router";
+import { FeedItemProps } from "@/types";
 
 const FeedItem = ({
   id,
-  userName,
-  postedAt,
-  body,
-  source,
-  commentCount,
+  userId,
+  nickname,
+  profileImg,
+  image,
+  text,
+  comments,
+  createdAt,
 }: FeedItemProps) => {
   const colorScheme = useThemeColor();
 
-  const onPress = () => {
+  const navigateToFeed = () => {
     router.navigate(`/feed/${id}`);
   };
 
+  const navigateToProfile = () => {
+    router.navigate(`/profile/${userId}`);
+  };
+
   return (
-    <Pressable style={styles.container} onPress={onPress}>
-      <View style={styles.row}>
-        <Avatar />
+    <View style={styles.container}>
+      <Pressable style={styles.row} onPress={navigateToProfile}>
+        <Avatar source={profileImg} />
         <View style={styles.marginLeft}>
           <Text variant="body2" weight="semiBold">
-            {userName}
+            {nickname}
           </Text>
           <Text variant="body2" color="gray_300">
-            {postedAt}
+            {createdAt}
           </Text>
         </View>
-      </View>
-      <Text numberOfLines={2} ellipsizeMode="tail" variant="body2">
-        {body}
-      </Text>
-      {source && (
-        <Image
-          width="100%"
-          height={224}
-          contentFit="cover"
-          style={styles.image}
-          source={source}
-        />
-      )}
-      <View style={styles.row}>
-        <TouchableOpacity>
-          <Ionicons
-            name="heart-outline"
-            size={26}
-            color={colorScheme.text.gray_400}
+      </Pressable>
+      <Pressable style={styles.container} onPress={navigateToFeed}>
+        <Text numberOfLines={2} ellipsizeMode="tail" variant="body2">
+          {text}
+        </Text>
+        {image && (
+          <Image
+            width="100%"
+            height={224}
+            contentFit="cover"
+            style={styles.image}
+            source={image}
           />
-        </TouchableOpacity>
-        <View style={[styles.row, styles.marginLeft]}>
-          <Ionicons
-            name="chatbubble-outline"
-            size={24}
-            color={colorScheme.text.gray_400}
-          />
-          <Text
-            variant="caption"
-            color="gray_500"
-            style={styles.marginLeftSmall}
-          >
-            {commentCount}
-          </Text>
+        )}
+        <View style={styles.row}>
+          <TouchableOpacity>
+            <Ionicons
+              name="heart-outline"
+              size={26}
+              color={colorScheme.text.gray_400}
+            />
+          </TouchableOpacity>
+          <View style={[styles.row, styles.marginLeft]}>
+            <Ionicons
+              name="chatbubble-outline"
+              size={24}
+              color={colorScheme.text.gray_400}
+            />
+            <Text
+              variant="caption"
+              color="gray_500"
+              style={styles.marginLeftSmall}
+            >
+              {comments?.length}
+            </Text>
+          </View>
         </View>
-      </View>
-    </Pressable>
+      </Pressable>
+    </View>
   );
 };
 
