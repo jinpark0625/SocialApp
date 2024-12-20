@@ -2,6 +2,7 @@ import React from "react";
 import { View, TouchableOpacity, StyleSheet } from "react-native";
 import Text from "./Text";
 import type { ConfirmModalProps as BaseConfirmModalProps } from "@/types/components";
+import { useThemeColor } from "@/hooks";
 
 interface ConfirmModalProps {
   modalProps: BaseConfirmModalProps;
@@ -10,9 +11,12 @@ interface ConfirmModalProps {
 
 export const ConfirmModal = ({ modalProps, onClose }: ConfirmModalProps) => {
   const { title, message, onConfirm, onCancel } = modalProps;
+  const colorScheme = useThemeColor();
 
   return (
-    <View style={styles.modalContainer}>
+    <View
+      style={[{ backgroundColor: colorScheme.modal }, styles.modalContainer]}
+    >
       {title && (
         <Text variant="subheading" weight="bold" style={styles.title}>
           {title}
@@ -28,15 +32,15 @@ export const ConfirmModal = ({ modalProps, onClose }: ConfirmModalProps) => {
               onClose();
             }}
           >
-            <Text variant="subheading" weight="semiBold">
+            <Text variant="subheading" weight="semiBold" color="gray_300">
               취소
             </Text>
           </TouchableOpacity>
         )}
         <TouchableOpacity
           style={styles.button}
-          onPress={() => {
-            onConfirm?.();
+          onPress={async () => {
+            await onConfirm?.();
             onClose();
           }}
         >
@@ -51,7 +55,6 @@ export const ConfirmModal = ({ modalProps, onClose }: ConfirmModalProps) => {
 
 const styles = StyleSheet.create({
   modalContainer: {
-    backgroundColor: "white",
     borderRadius: 16,
     padding: 20,
     width: "80%",
