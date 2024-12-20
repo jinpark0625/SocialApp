@@ -7,8 +7,18 @@ import {
 } from "react-native";
 import { Container, Hero } from "@/componets/layout";
 import { AuthForm } from "@/componets/sections";
+import { useAuth } from "@/hooks";
+import { router } from "expo-router";
 
 const LoginScreen = () => {
+  const INPUT_ACCESSORY_ID = "password";
+  const { signIn } = useAuth();
+
+  const onSubmit = async () => {
+    await signIn();
+    router.replace("/(app)/(tabs)");
+  };
+
   return (
     <Container>
       <TouchableWithoutFeedback
@@ -20,7 +30,7 @@ const LoginScreen = () => {
             content={`환영합니다!${`\n`}로그인 후 시작하세요`}
             style={styles.hero}
           />
-          <AuthForm />
+          <AuthForm onSubmit={onSubmit} inputAccessoryId={INPUT_ACCESSORY_ID} />
         </View>
       </TouchableWithoutFeedback>
     </Container>
@@ -35,5 +45,6 @@ const styles = StyleSheet.create({
   },
   hero: {
     paddingTop: Platform.OS === "ios" ? 60 : 76,
+    paddingHorizontal: 20,
   },
 });
