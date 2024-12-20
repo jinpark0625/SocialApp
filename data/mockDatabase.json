@@ -1,0 +1,105 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "test@example.com",
+      "password": "12345",
+      "nickname": "testUser",
+      "profileImg": "https://fastly.picsum.photos/id/722/200/300.jpg?grayscale&hmac=Ri7W9tCBzh_US2GxemMEqFT3Ll4nGrOioHMEkGD6qNY"
+    },
+    {
+      "id": 2,
+      "email": "test@test.com",
+      "password": "12345",
+      "nickname": "test",
+      "profileImg": "https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U"
+    }
+  ],
+  "feeds": [
+    {
+      "id": 1,
+      "userId": 1,
+      "nickname": "testUser",
+      "profileImg": "https://fastly.picsum.photos/id/722/200/300.jpg?grayscale&hmac=Ri7W9tCBzh_US2GxemMEqFT3Ll4nGrOioHMEkGD6qNY",
+      "image": "https://fastly.picsum.photos/id/866/200/300.jpg?hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI",
+      "text": "This is a test feed",
+      "comments": [
+        {
+          "id": 1,
+          "userId": 1,
+          "text": "This is a test comment",
+          "createdAt": "2024-12-20T12:00:00Z"
+        }
+      ],
+      "createdAt": "2024-12-20T12:00:00Z"
+    },
+    {
+      "id": 2,
+      "userId": 1,
+      "nickname": "testUser",
+      "profileImg": "https://fastly.picsum.photos/id/722/200/300.jpg?grayscale&hmac=Ri7W9tCBzh_US2GxemMEqFT3Ll4nGrOioHMEkGD6qNY",
+      "image": "https://picsum.photos/id/1/200/300",
+      "text": "This is a test feed",
+      "comments": [
+        {
+          "id": 1,
+          "userId": 1,
+          "text": "This is a test comment",
+          "createdAt": "2024-12-20T12:00:00Z"
+        }
+      ],
+      "createdAt": "2024-12-20T12:00:00Z"
+    },
+    {
+      "id": 3,
+      "userId": 1,
+      "nickname": "testUser",
+      "profileImg": "https://fastly.picsum.photos/id/722/200/300.jpg?grayscale&hmac=Ri7W9tCBzh_US2GxemMEqFT3Ll4nGrOioHMEkGD6qNY",
+      "image": "https://picsum.photos/id/2/200/300",
+      "text": "This is a test feed",
+      "comments": [
+        {
+          "id": 1,
+          "userId": 1,
+          "text": "This is a test comment",
+          "createdAt": "2024-12-20T12:00:00Z"
+        }
+      ],
+      "createdAt": "2024-12-20T12:00:00Z"
+    },
+    {
+      "id": 4,
+      "userId": 2,
+      "nickname": "test",
+      "profileImg": "https://fastly.picsum.photos/id/722/200/300.jpg?grayscale&hmac=Ri7W9tCBzh_US2GxemMEqFT3Ll4nGrOioHMEkGD6qNY",
+      "image": "https://fastly.picsum.photos/id/39/3456/2304.jpg?hmac=cc_VPxzydwTUbGEtpsDeo2NxCkeYQrhTLqw4TFo-dIg",
+      "text": "This is a test feed",
+      "comments": [
+        {
+          "id": 1,
+          "userId": 2,
+          "text": "This is a test comment",
+          "createdAt": "2024-12-20T12:00:00Z"
+        }
+      ],
+      "createdAt": "2024-12-20T12:00:00Z"
+    },
+    {
+      "id": 5,
+      "userId": 2,
+      "nickname": "test",
+      "profileImg": "https://fastly.picsum.photos/id/40/4106/2806.jpg?hmac=MY3ra98ut044LaWPEKwZowgydHZ_rZZUuOHrc3mL5mI",
+      "image": "https://fastly.picsum.photos/id/40/4106/2806.jpg?hmac=MY3ra98ut044LaWPEKwZowgydHZ_rZZUuOHrc3mL5mI",
+      "text": "This is a test feed",
+      "comments": [
+        {
+          "id": 1,
+          "userId": 2,
+          "text": "This is a test comment",
+          "createdAt": "2024-12-20T12:00:00Z"
+        }
+      ],
+      "createdAt": "2024-12-20T12:00:00Z"
+    }
+  ]
+}
