@@ -8,18 +8,19 @@ import {
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { Button, TextInput, Text } from "../common";
-import { useFormControl, useThemeColor } from "@/hooks";
+import { useFormControl, useThemeColor, useModal } from "@/hooks";
 import { router } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { FieldValues, SubmitHandler } from "react-hook-form";
-import { useModal } from "@/hooks";
 import { AUTH_ERROR_MESSAGES } from "@/constants";
+import { AuthFormProps } from "@/types";
 
 type AuthFormFields = "email" | "password" | "confirmPassword" | "nickname";
 
-const INPUT_ACCESSORY_ID = "authInput";
-
-const AuthForm = ({ isRegister = false }: { isRegister?: boolean }) => {
+const AuthForm = ({
+  isRegister = false,
+  onSubmit,
+  inputAccessoryId,
+}: AuthFormProps) => {
   const colorScheme = useThemeColor();
   const { showModal } = useModal();
 
@@ -47,13 +48,10 @@ const AuthForm = ({ isRegister = false }: { isRegister?: boolean }) => {
 
   const password = watch("password");
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    console.log("---data----", data);
-  };
-
   const handleFormSubmit = handleSubmit(
-    (data) => {
-      onSubmit(data);
+    async (data) => {
+      //  TODO: 실제 data 전달!
+      await onSubmit();
     },
     (errors) => {
       const firstErrorField = Object.keys(errors)[0] as AuthFormFields;
@@ -111,7 +109,7 @@ const AuthForm = ({ isRegister = false }: { isRegister?: boolean }) => {
             }
             secureTextEntry={!isPasswordVisible}
             textContentType="oneTimeCode"
-            inputAccessoryViewID={isRegister ? undefined : INPUT_ACCESSORY_ID}
+            inputAccessoryViewID={isRegister ? undefined : inputAccessoryId}
             returnKeyType={isRegister ? "next" : "done"}
             maxLength={6}
             rules={{
@@ -175,7 +173,7 @@ const AuthForm = ({ isRegister = false }: { isRegister?: boolean }) => {
                     message: "닉네임은 12자 이내여야 합니다",
                   },
                 }}
-                inputAccessoryViewID={INPUT_ACCESSORY_ID}
+                inputAccessoryViewID={inputAccessoryId}
                 onSubmitEditing={handleFormSubmit}
               />
             </>
@@ -207,7 +205,7 @@ const AuthForm = ({ isRegister = false }: { isRegister?: boolean }) => {
         </View>
       </View>
       {Platform.OS === "ios" && (
-        <InputAccessoryView nativeID={INPUT_ACCESSORY_ID}>
+        <InputAccessoryView nativeID={inputAccessoryId}>
           <Button
             disabled={!isValid}
             title={isRegister ? "회원가입 하기" : "로그인 하기"}
@@ -226,6 +224,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     justifyContent: "space-between",
+    paddingHorizontal: 20,
   },
   inputContainer: {
     gap: 8,
