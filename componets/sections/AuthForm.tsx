@@ -14,11 +14,17 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { AUTH_ERROR_MESSAGES } from "@/constants";
 import { AuthFormProps } from "@/types";
 
-type AuthFormFields = "email" | "password" | "confirmPassword" | "nickname";
+type AuthFormFields = {
+  email: string;
+  password: string;
+  confirmPassword?: string;
+  nickname?: string;
+};
 
 const AuthForm = ({
   isRegister = false,
   onSubmit,
+  isSubmitting = false,
   inputAccessoryId,
 }: AuthFormProps) => {
   const colorScheme = useThemeColor();
@@ -42,7 +48,7 @@ const AuthForm = ({
     watch,
     setFocus,
     reset,
-  } = useFormControl({
+  } = useFormControl<AuthFormFields>({
     defaultValues,
   });
 
@@ -51,10 +57,10 @@ const AuthForm = ({
   const handleFormSubmit = handleSubmit(
     async (data) => {
       //  TODO: 실제 data 전달!
-      await onSubmit();
+      await onSubmit(data);
     },
     (errors) => {
-      const firstErrorField = Object.keys(errors)[0] as AuthFormFields;
+      const firstErrorField = Object.keys(errors)[0] as keyof AuthFormFields;
 
       if (firstErrorField) {
         showModal({
@@ -98,7 +104,7 @@ const AuthForm = ({
                 message: "올바른 이메일 형식이 아닙니다",
               },
             }}
-            onSubmitEditing={(e) => setFocus("password")}
+            onSubmitEditing={() => setFocus("password")}
           />
           {/* 비밀번호 */}
           <TextInput
@@ -152,8 +158,12 @@ const AuthForm = ({
                     value: 6,
                     message: "비밀번호는 6자리여야 합니다",
                   },
-                  validate: (value) =>
-                    value === password || "비밀번호가 일치하지 않습니다",
+                  validate: (value: string | undefined) => {
+                    if (value && value === password) {
+                      return true;
+                    }
+                    return "비밀번호가 일치하지 않습니다";
+                  },
                 }}
                 onSubmitEditing={
                   isRegister ? () => setFocus("nickname") : undefined
@@ -197,7 +207,7 @@ const AuthForm = ({
           )}
 
           <Button
-            disabled={!isValid}
+            disabled={!isValid || isSubmitting}
             title={isRegister ? "회원가입 하기" : "로그인 하기"}
             onPress={handleFormSubmit}
             style={styles.submitButton}
@@ -207,7 +217,7 @@ const AuthForm = ({
       {Platform.OS === "ios" && (
         <InputAccessoryView nativeID={inputAccessoryId}>
           <Button
-            disabled={!isValid}
+            disabled={!isValid || isSubmitting}
             title={isRegister ? "회원가입 하기" : "로그인 하기"}
             onPress={handleFormSubmit}
             style={{ borderRadius: 0 }}
