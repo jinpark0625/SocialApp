@@ -6,7 +6,7 @@ import { useTheme } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { CommentInputProps } from "@/types";
 
-const CommentInput = ({ articleId }: CommentInputProps) => {
+const CommentInput = ({ feedId }: CommentInputProps) => {
   const colorScheme = useTheme();
   const { bottom } = useSafeAreaInsets();
 
