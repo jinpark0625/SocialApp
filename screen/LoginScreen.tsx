@@ -7,16 +7,48 @@ import {
 } from "react-native";
 import { Container, Hero } from "@/componets/layout";
 import { AuthForm } from "@/componets/sections";
-import { useAuth } from "@/hooks";
+import { useAuth, useMockApi, useModal, useUser } from "@/hooks";
+import { mockApi } from "@/api/mockApi";
+import { UserSubmit } from "@/types";
 import { router } from "expo-router";
 
 const LoginScreen = () => {
   const INPUT_ACCESSORY_ID = "password";
-  const { signIn } = useAuth();
 
-  const onSubmit = async () => {
-    await signIn();
-    router.replace("/(app)/(tabs)");
+  const { showModal } = useModal();
+  const { signIn } = useAuth();
+  const { setCurrentUser } = useUser();
+  const { apiCall, loading } = useMockApi();
+
+  const onSubmit = async (userData: UserSubmit) => {
+    try {
+      const user = await apiCall(
+        mockApi.login,
+        userData.email,
+        userData.password
+      );
+      if (user) {
+        await signIn();
+        setCurrentUser(user);
+        router.replace("/(app)/(tabs)");
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        showModal({
+          type: "confirm",
+          title: "로그인 실패",
+          message: err.message,
+          onConfirm: () => console.log("확인"),
+        });
+      } else {
+        showModal({
+          type: "confirm",
+          title: "로그인 실패",
+          message: "로긍인 실패했습니다. 잠시후 다시 시도 해주세요.",
+          onConfirm: () => console.log("확인"),
+        });
+      }
+    }
   };
 
   return (
@@ -30,7 +62,11 @@ const LoginScreen = () => {
             content={`환영합니다!${`\n`}로그인 후 시작하세요`}
             style={styles.hero}
           />
-          <AuthForm onSubmit={onSubmit} inputAccessoryId={INPUT_ACCESSORY_ID} />
+          <AuthForm
+            onSubmit={onSubmit}
+            isSubmitting={loading}
+            inputAccessoryId={INPUT_ACCESSORY_ID}
+          />
         </View>
       </TouchableWithoutFeedback>
     </Container>

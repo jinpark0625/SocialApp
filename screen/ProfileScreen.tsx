@@ -4,7 +4,7 @@ import { useUser, useMockApi, useModal } from "@/hooks";
 import { mockApi } from "@/api/mockApi";
 import { UserWithoutPasswordAndEmail } from "@/types/api";
 
-const MyInfoScreen = () => {
+const ProfileScreen = ({ userId }: { userId: string | string[] }) => {
   const { showModal } = useModal();
   const { currentUser } = useUser();
   const { apiCall } = useMockApi();
@@ -13,9 +13,10 @@ const MyInfoScreen = () => {
     (Feed & { user: UserWithoutPasswordAndEmail })[] | null
   >(null);
 
+  // TODO: 유저정보 불러오는 API 만들기...
   const fetchPostedFeeds = async () => {
     try {
-      const res = await apiCall(mockApi.getUserFeeds, currentUser?.id);
+      const res = await apiCall(mockApi.getUserFeeds, Number(userId));
       setData(res);
     } catch (err) {
       if (err instanceof Error) {
@@ -38,9 +39,15 @@ const MyInfoScreen = () => {
 
   useEffect(() => {
     fetchPostedFeeds();
-  }, []);
+  }, [userId]);
 
-  return <UserInfo isCurrentUser user={currentUser} data={data} />;
+  return (
+    <UserInfo
+      isCurrentUser={currentUser?.id === data?.[0]?.user.id}
+      user={data?.[0]?.user as User}
+      data={data}
+    />
+  );
 };
 
-export default MyInfoScreen;
+export default ProfileScreen;

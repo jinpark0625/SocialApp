@@ -9,17 +9,50 @@ import {
 import { Hero } from "@/componets/layout";
 import { AuthForm } from "@/componets/sections";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useAuth } from "@/hooks";
+import { useAuth, useMockApi, useModal, useUser } from "@/hooks";
+import { mockApi } from "@/api/mockApi";
 import { router } from "expo-router";
+import { UserSubmit } from "@/types";
 
 const RegisterScreen = () => {
   const INPUT_ACCESSORY_ID = "nickname";
-  const bottom = useSafeAreaInsets().bottom;
-  const { signIn } = useAuth();
+  const { bottom } = useSafeAreaInsets();
 
-  const onSubmit = async () => {
-    await signIn();
-    router.replace("/(app)/(tabs)");
+  const { showModal } = useModal();
+  const { signIn } = useAuth();
+  const { setCurrentUser } = useUser();
+  const { apiCall, loading } = useMockApi();
+
+  const onSubmit = async (userData: UserSubmit) => {
+    try {
+      const user = await apiCall(
+        mockApi.signUp,
+        userData.email,
+        userData.password,
+        userData.nickname
+      );
+      if (user) {
+        await signIn();
+        setCurrentUser(user);
+        router.replace("/(app)/(tabs)");
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        showModal({
+          type: "confirm",
+          title: "회원가입 실패",
+          message: err.message,
+          onConfirm: () => console.log("확인"),
+        });
+      } else {
+        showModal({
+          type: "confirm",
+          title: "회원가입 실패",
+          message: "회원가입에 실패했습니다. 잠시후 다시 시도 해주세요.",
+          onConfirm: () => console.log("확인"),
+        });
+      }
+    }
   };
 
   return (
@@ -37,6 +70,7 @@ const RegisterScreen = () => {
 
           <AuthForm
             isRegister
+            isSubmitting={loading}
             onSubmit={onSubmit}
             inputAccessoryId={INPUT_ACCESSORY_ID}
           />
