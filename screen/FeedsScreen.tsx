@@ -1,112 +1,45 @@
-import {
-  FlatList,
-  StyleSheet,
-  View,
-  RefreshControl,
-  ActivityIndicator,
-} from "react-native";
-import { FeedItem } from "@/componets/sections";
-import { useTheme } from "@react-navigation/native";
+import { useState, useEffect } from "react";
+import { Feeds } from "@/componets/sections";
+import { useMockApi, useModal } from "@/hooks";
+import { mockApi } from "@/api/mockApi";
+import { UserWithoutPasswordAndEmail } from "@/types/api";
 
 const FeedsScreen = () => {
-  const colorSceheme = useTheme();
+  const { showModal } = useModal();
+  const { apiCall } = useMockApi();
 
-  const data = [
-    {
-      id: 1,
-      userName: "test",
-      postedAt: "333",
-      body: "sss",
-      uri: "https://i.pinimg.com/736x/bf/24/3e/bf243e885e034736c1b954fd7e5002ac.jpg",
-      commentCount: 2,
-    },
-    {
-      id: 2,
-      userName: "test",
-      postedAt: "333",
-      body: "sss",
-      uri: undefined,
-      commentCount: 1,
-    },
-    {
-      id: 3,
-      userName: "test",
-      postedAt: "333",
-      body: "sss",
-      uri: undefined,
-      commentCount: 0,
-    },
-  ];
+  const [data, setData] = useState<
+    (Feed & { user: UserWithoutPasswordAndEmail })[]
+  >([]);
 
-  const isFetchingNextPage = false;
-
-  return (
-    <FlatList
-      data={data}
-      renderItem={({ item }) => (
-        <View style={styles.listItem}>
-          <FeedItem
-            id={item.id}
-            userName={item.userName}
-            postedAt={item.postedAt}
-            body={item.body}
-            source={item.uri}
-            commentCount={item.commentCount}
-          />
-        </View>
-      )}
-      contentContainerStyle={styles.container}
-      keyExtractor={(item) => item.id.toString()}
-      style={styles.list}
-      ItemSeparatorComponent={() => (
-        <View
-          style={[
-            styles.separator,
-            { backgroundColor: colorSceheme.colors.border },
-          ]}
-        />
-      )}
-      ListFooterComponent={() => (
-        <>
-          {data.length > 0 ? <View style={styles.separator} /> : null}
-          {isFetchingNextPage && (
-            <ActivityIndicator
-              size="small"
-              color="black"
-              style={styles.spinner}
-            />
-          )}
-        </>
-      )}
-      onEndReachedThreshold={0.5}
-      onEndReached={() => {}}
-      refreshControl={
-        <RefreshControl onRefresh={() => {}} refreshing={false} />
+  const fetchFeeds = async () => {
+    try {
+      const res = await apiCall(mockApi.getFeeds);
+      setData(res || []);
+    } catch (err) {
+      if (err instanceof Error) {
+        showModal({
+          type: "confirm",
+          title: "불러오기 실패",
+          message: err.message,
+          onConfirm: () => console.log("확인"),
+        });
+      } else {
+        showModal({
+          type: "confirm",
+          title: "불러오기 실패",
+          message: "게시글을 불러올 수 없습니다. 잠시후 다시 시도 해주세요.",
+          onConfirm: () => console.log("확인"),
+        });
       }
-    />
-  );
+    }
+  };
+
+  useEffect(() => {
+    fetchFeeds();
+  }, []);
+
+  return <Feeds data={data} />;
 };
 
 export default FeedsScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    paddingTop: 20,
-  },
-  list: {
-    flex: 1,
-  },
-  listItem: {
-    paddingHorizontal: 20,
-  },
-  separator: {
-    width: "100%",
-    marginVertical: 20,
-    height: 1,
-  },
-  spinner: {
-    backgroundColor: "white",
-    paddingTop: 32,
-    paddingBottom: 32,
-  },
-});
